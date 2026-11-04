@@ -5,11 +5,55 @@ const orderItems = document.querySelector('#order-items');
 const clearOrderButton = document.querySelector('#clear-order');
 const placeOrderButton = document.querySelector('#place-order');
 const orderStatus = document.querySelector('#order-status');
+const slides = Array.from(document.querySelectorAll('.slide'));
+const navigationLinks = Array.from(document.querySelectorAll('.navbar a'));
 const inrFormatter = new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency: 'INR',
     maximumFractionDigits: 0
 });
+
+function showSlide(slideId) {
+    const requestedSlide = slides.find((slide) => slide.id === slideId);
+    const activeSlide = requestedSlide || slides.find((slide) => slide.id === 'home');
+
+    slides.forEach((slide) => {
+        const isActive = slide === activeSlide;
+        slide.classList.toggle('is-active', isActive);
+        slide.setAttribute('aria-hidden', String(!isActive));
+    });
+
+    navigationLinks.forEach((link) => {
+        if (link.hash === `#${activeSlide.id}`) {
+            link.setAttribute('aria-current', 'page');
+        } else {
+            link.removeAttribute('aria-current');
+        }
+    });
+}
+
+document.addEventListener('click', (event) => {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link) return;
+
+    const slideId = link.hash.slice(1);
+    if (!slides.some((slide) => slide.id === slideId)) return;
+
+    event.preventDefault();
+    showSlide(slideId);
+    if (window.location.hash !== `#${slideId}`) {
+        window.history.pushState(null, '', `#${slideId}`);
+    }
+});
+
+function showSlideFromHash() {
+    showSlide(window.location.hash.slice(1) || 'home');
+}
+
+window.addEventListener('popstate', showSlideFromHash);
+window.addEventListener('hashchange', showSlideFromHash);
+showSlideFromHash();
+document.body.classList.add('slides-ready');
 
 function updateOrderSummary() {
     let totalItems = 0;

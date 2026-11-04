@@ -18,7 +18,6 @@
 
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 90px;
 }
 
 body {
@@ -42,6 +41,30 @@ a {
 .header-inner {
     width: min(1120px, calc(100% - 48px));
     margin: 0 auto;
+}
+
+body.slides-ready .slide:not(.is-active) {
+    display: none;
+}
+
+.slide {
+    min-height: calc(100svh - 82px);
+}
+
+.slide.is-active {
+    animation: slide-in 320ms ease both;
+}
+
+@keyframes slide-in {
+    from {
+        opacity: 0;
+        transform: translateX(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .site-header {
@@ -105,7 +128,7 @@ a {
     padding: 8px 0;
     color: #0f0f0f;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: bold;
     text-decoration: none;
     transition: color 180ms ease;
 }
@@ -180,7 +203,7 @@ a {
     margin: 0 0 19px;
     color: var(--coral-dark);
     font-size: 20px;
-    font-weight: 700;
+    font-weight: bold;
     letter-spacing: 1.2px;
     text-transform: uppercase;
     padding-top: 10px;
@@ -347,7 +370,6 @@ h2 span {
 .section-block {
     padding-top: 100px;
     padding-bottom: 100px;
-    scroll-margin-top: 80px;
 }
 
 .about {
@@ -880,10 +902,6 @@ a:focus-visible {
 }
 
 @media (max-width: 640px) {
-    html {
-        scroll-padding-top: 115px;
-    }
-
     .section-wrap,
     .header-inner {
         width: min(100% - 36px, 480px);
@@ -916,7 +934,7 @@ a:focus-visible {
     }
 
     .hero {
-        min-height: auto;
+        min-height: calc(100svh - 115px);
         grid-template-columns: 1fr;
         gap: 15px;
         padding-top: 62px;
